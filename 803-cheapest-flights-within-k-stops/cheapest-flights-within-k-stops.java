@@ -10,11 +10,10 @@ class Solution {
         dist[src]=0;
         ArrayDeque<int[]> q=new ArrayDeque<>();
         q.offer(new int[]{src,0});
-        int stops=0;
-        while(!q.isEmpty() && stops<=k)
+        for(int i=0;i<=k;i++)
         {
             int s=q.size();
-            for(int i=0;i<s;i++)
+            for(int j=0;j<s;j++)
             {
                 int[] curr=q.poll();
                 for(int[] nei:adj.get(curr[0]))
@@ -26,7 +25,6 @@ class Solution {
                     }
                 }
             }
-            stops++;
         }
         return dist[dst]==Integer.MAX_VALUE?-1:dist[dst];
     }
