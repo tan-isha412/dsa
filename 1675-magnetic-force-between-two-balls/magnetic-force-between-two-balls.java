@@ -1,33 +1,35 @@
 class Solution {
     public int maxDistance(int[] position, int m) {
-        int n=position.length;
-        Arrays.sort(position);
-        int maxm=position[n-1]-position[0];
-        int l=0,r=maxm,ans=0;
-        while(l<=r)
+        int minm=1,maxm=-1,ans=-1;
+        for(int p:position)
         {
-            int mid=(l+r)/2;
-            if(possible(position,m,mid))
+            if(p>maxm) maxm=p;
+        }
+        Arrays.sort(position);
+        while(minm<=maxm)
+        {
+            int mid=(minm+maxm)/2;
+            if(canPlace(position,m-1,mid))
             {
                 ans=mid;
-                l=mid+1;
+                minm=mid+1;
             }
             else
-                r=mid-1;
+                maxm=mid-1;
         }
         return ans;
     }
-    public boolean possible(int[] position,int m,int mid)
+    public boolean canPlace(int[] position,int m,int mid)
     {
-        int count=1,lastplaced=position[0];
+        int start=0;
         for(int i=1;i<position.length;i++)
         {
-            if(position[i]-lastplaced>=mid)
+            if(position[i]-position[start]>=mid)
             {
-                count++;
-                lastplaced=position[i];
+                start=i;
+                m--;
             }
         }
-        return count>=m;
+        return m<=0;
     }
 }
