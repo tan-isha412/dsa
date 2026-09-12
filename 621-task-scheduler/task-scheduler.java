@@ -1,6 +1,5 @@
 class Solution {
-    public int leastInterval(char[] tasks, int n) 
-    {
+    public int leastInterval(char[] tasks, int n) {
         int[] freq=new int[26];
         for(char ch:tasks)
             freq[ch-'A']++;
@@ -12,7 +11,7 @@ class Solution {
             if(freq[i]==0) break;
             gaps-=Math.min(maxf-1,freq[i]);
         }
-        if(gaps<0) return tasks.length;
+        if(gaps<=0) return tasks.length;
         return tasks.length+gaps;
     }
 }
