@@ -1,33 +1,28 @@
 class Solution {
-    int[] row={-1,1,0,0};
-    int[] col={0,0,-1,1};
     public boolean exist(char[][] board, String word) {
-        char start=word.charAt(0);
         for(int i=0;i<board.length;i++)
         {
             for(int j=0;j<board[0].length;j++)
             {
-                if(board[i][j]==start)
+                if(board[i][j]==word.charAt(0))
                 {
-                    if(dfs(0,i,j,board,word)) return true;
+                    if(dfs(board,i,j,0,"",word)) return true;
                 }
             }
         }
         return false;
     }
-    public boolean dfs(int idx,int r,int c,char[][] board,String word)
+    public boolean dfs(char[][] board,int r,int c,int idx,String str,String word)
     {
-        if(idx==word.length()) return true;
+        if(idx==word.length())
+            return true;
         if(r<0 || c<0 || r>=board.length || c>=board[0].length || board[r][c]=='.' || board[r][c]!=word.charAt(idx)) return false;
+        str+=board[r][c];
         char ch=board[r][c];
         board[r][c]='.';
-        for(int i=0;i<4;i++)
-        {
-            int newr=r+row[i],newc=c+col[i];
-            if(dfs(idx+1,newr,newc,board,word))
-                return true;
-        }
+        boolean ans=dfs(board,r-1,c,idx+1,str,word)||dfs(board,r+1,c,idx+1,str,word)||dfs(board,r,c-1,idx+1,str,word)||dfs(board,r,c+1,idx+1,str,word);
         board[r][c]=ch;
-        return false;
+        return ans;
+
     }
 }
