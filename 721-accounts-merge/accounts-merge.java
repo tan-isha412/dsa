@@ -1,14 +1,12 @@
 class DSU
 {
     int[] par;
-    int n;
     DSU(int n)
     {
-        this.n=n;
-        par=new int[n];
+        this.par=new int[n];
         for(int i=0;i<n;i++)
-            par[i]=i;
-    }    
+            this.par[i]=i;
+    }
     public int find(int x)
     {
         if(par[x]==x) return x;
@@ -16,52 +14,53 @@ class DSU
     }
     public void union(int x,int y)
     {
-        int parx=find(x),pary=find(y);
-        if(parx!=pary)
-            par[pary]=parx;
+        int px=find(x),py=find(y);
+        if(px!=py)
+            par[py]=px;
     }
 }
 class Solution {
     public List<List<String>> accountsMerge(List<List<String>> accounts) {
-        Map<String,Integer> emToID=new HashMap<>();
-        Map<String,String> emToName=new HashMap<>();
         int id=0;
+        Map<String,String> emToName=new HashMap<>();
+        Map<String,Integer> emToID=new HashMap<>();
         for(List<String> acc:accounts)
         {
-            String firstem=acc.get(0);
+            String name=acc.get(0);
             for(int i=1;i<acc.size();i++)
             {
-                if(!emToName.containsKey(acc.get(i)))
+                if(!emToID.containsKey(acc.get(i)))
                 {
-                emToID.put(acc.get(i),id++);
-                emToName.put(acc.get(i),firstem);
+                    emToID.put(acc.get(i),id++);
+                    emToName.put(acc.get(i),name);
                 }
             }
         }
         DSU obj=new DSU(id);
         for(List<String> acc:accounts)
         {
+            String parem=acc.get(1);
             for(int i=2;i<acc.size();i++)
-            {
-                obj.union(emToID.get(acc.get(1)),emToID.get(acc.get(i)));
-            }
+                obj.union(emToID.get(parem),emToID.get(acc.get(i)));
         }
-        Map<Integer, List<String>> groups = new HashMap<>();
-        for (String email : emToID.keySet()) {
-            int root = obj.find(emToID.get(email));
-            groups.computeIfAbsent(root, x -> new ArrayList<>()).add(email);
+        Map<Integer,List<String>> paridToEm=new HashMap<>();
+        for(String em:emToName.keySet())
+        {
+            int parID=obj.find(emToID.get(em));
+            if (!paridToEm.containsKey(parID)) 
+                paridToEm.put(parID, new ArrayList<>());
+            paridToEm.get(parID).add(em);
         }
-
-        // Step 4: Sort emails and format the final output list
-        List<List<String>> mergedAccounts = new ArrayList<>();
-        for (List<String> component : groups.values()) {
-            Collections.sort(component);
-            List<String> account = new ArrayList<>();
-            account.add(emToName.get(component.get(0))); // Add the account name first
-            account.addAll(component);                     // Add sorted emails
-            mergedAccounts.add(account);
+        List<List<String>> ans=new ArrayList<>();
+        for(List<String> grp:paridToEm.values())
+        {
+            List<String> one=new ArrayList<>();
+            String name=emToName.get(grp.get(0));
+            Collections.sort(grp);
+            one.add(name);
+            one.addAll(grp);
+            ans.add(new ArrayList<>(one));
         }
-
-        return mergedAccounts;
+        return ans;
     }
 }
