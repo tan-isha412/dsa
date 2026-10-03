@@ -1,4 +1,6 @@
 class Solution {
+    int[] r={-1,1,0,0};
+    int[] c={0,0,-1,1};
     public boolean exist(char[][] board, String word) {
         for(int i=0;i<board.length;i++)
         {
@@ -6,23 +8,24 @@ class Solution {
             {
                 if(board[i][j]==word.charAt(0))
                 {
-                    if(dfs(board,i,j,0,"",word)) return true;
+                    if(bfs(i,j,board,word,0)) return true;
                 }
             }
         }
         return false;
     }
-    public boolean dfs(char[][] board,int r,int c,int idx,String str,String word)
+    public boolean bfs(int i,int j,char[][] board,String word,int idx)
     {
-        if(idx==word.length())
-            return true;
-        if(r<0 || c<0 || r>=board.length || c>=board[0].length || board[r][c]=='.' || board[r][c]!=word.charAt(idx)) return false;
-        str+=board[r][c];
-        char ch=board[r][c];
-        board[r][c]='.';
-        boolean ans=dfs(board,r-1,c,idx+1,str,word)||dfs(board,r+1,c,idx+1,str,word)||dfs(board,r,c-1,idx+1,str,word)||dfs(board,r,c+1,idx+1,str,word);
-        board[r][c]=ch;
-        return ans;
-
+        if(idx==word.length()) return true;
+        if(i<0 || i>=board.length || j<0 || j>=board[0].length || board[i][j]!=word.charAt(idx)) return false;
+        char ch=board[i][j];
+        board[i][j]='.';
+        for(int k=0;k<4;k++)
+        {
+            int newi=i+r[k],newj=j+c[k];
+            if(bfs(newi,newj,board,word,idx+1)) return true;
+        }
+        board[i][j]=ch;
+        return false;
     }
 }
