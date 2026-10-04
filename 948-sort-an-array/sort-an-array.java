@@ -12,6 +12,10 @@ class Solution {
         quickSort(nums, pIndex + 1, right);
     }
     private int partition(int[] nums, int left, int right) {
+        int pivotIndex = left + (int) (Math.random() * (right - left + 1));
+
+        swap(nums, left, pivotIndex);
+    
         int pivot = nums[left];
         int i = left - 1;
         int j = right + 1;
