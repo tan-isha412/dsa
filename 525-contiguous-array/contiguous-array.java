@@ -1,16 +1,16 @@
 class Solution {
-    int[] val={-1,1};
+    int[] actv={-1,1};
     public int findMaxLength(int[] nums) {
-        int prefixsum=0,maxlen=0;
         Map<Integer,Integer> m=new HashMap<>();
         m.put(0,-1);
-        for(int i=0;i<nums.length;i++)
+        int sum=0,maxlen=0;
+        for(int r=0;r<nums.length;r++)
         {
-            prefixsum+=val[nums[i]];
-            if(m.containsKey(prefixsum))
-                maxlen=Math.max(maxlen,i-m.get(prefixsum));
+            sum+=actv[nums[r]];
+            if(m.containsKey(sum))
+                maxlen=Math.max(maxlen,r-m.get(sum));
             else
-                m.put(prefixsum,i);
+                m.put(sum,r);
         }
         return maxlen;
     }
