@@ -2,24 +2,23 @@ class Solution {
     List<List<Integer>> ans=new ArrayList<>();
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         Arrays.sort(candidates);
-        backtrack(0,candidates,target,0,new ArrayList<>());
+        combination(candidates,target,0,0,new ArrayList<>());
         return ans;
     }
-    public void backtrack(int start,int[] nums,int target,int currsum,List<Integer> curradded)
+    public void combination(int[] nums,int target,int sum,int start,List<Integer> l)
     {
-        if(currsum==target)
+        if(sum==target)
         {
-            ans.add(new ArrayList<>(curradded));
+            ans.add(new ArrayList<>(l));
             return;
         }
-        if(start==nums.length) return;
+        if(sum>target || start==nums.length) return;
         for(int i=start;i<nums.length;i++)
         {
-            if((i>start && nums[i]==nums[i-1])) continue;
-            if(nums[i]+currsum>target) continue;
-            curradded.add(nums[i]);
-            backtrack(i+1,nums,target,currsum+nums[i],curradded);
-            curradded.remove(curradded.size()-1);
+            if(i>start && nums[i]==nums[i-1]) continue;
+            l.add(nums[i]);
+            combination(nums,target,sum+nums[i],i+1,l);
+            l.remove(l.size()-1);
         }
     }
 }
