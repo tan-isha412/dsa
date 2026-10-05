@@ -1,44 +1,43 @@
 class Pair
 {
-    int time;
-    String val;
-    Pair(int time,String val)
+    String key;
+    int value;
+    Pair(String key,int value)
     {
-        this.time=time;
-        this.val=val;
+        this.key=key;
+        this.value=value;
     }
 }
 class TimeMap {
     Map<String,List<Pair>> m;
-    public TimeMap() {
+    public TimeMap() 
+    {
         m=new HashMap<>();
     }
-    
-    public void set(String key, String value, int timestamp) {
+    public void set(String key, String value, int timestamp) 
+    {
         if(!m.containsKey(key))
             m.put(key,new ArrayList<>());
-        m.get(key).add(new Pair(timestamp,value));
+        Pair obj=new Pair(value,timestamp);
+        m.get(key).add(obj);
     }
-    
-    public String get(String key, int timestamp) {
-        if (!m.containsKey(key)) {
-            return "";
-        }
-        List<Pair> list = m.get(key);
-        
-        int left = 0;
-        int right = list.size() - 1;
-        String res = "";
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (list.get(mid).time <= timestamp) {
-                res = list.get(mid).val; 
-                left = mid + 1;          
-            } else {
-                right = mid - 1;         
+    public String get(String key, int timestamp) 
+    {
+        if(!m.containsKey(key)) return "";
+        int l=0,r=m.get(key).size()-1;
+        String ans="";
+        while(l<=r)
+        {
+            int mid=(l+r)/2;
+            if(m.get(key).get(mid).value>timestamp)
+                r=mid-1;
+            else
+            {
+                ans=m.get(key).get(mid).key;
+                l=mid+1;
             }
         }
-        return res;
+        return ans;
     }
 }
 
