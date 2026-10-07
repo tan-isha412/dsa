@@ -19,25 +19,16 @@ class Trie
         }
         curr.eow=true;
     }
-    public boolean search(String s)
-    {
-        Trie curr=this;
-        for(int i=0;i<s.length();i++)
+    public int minlenword(String s) {
+        Trie curr = this;
+        for (int i = 0; i < s.length(); i++) 
         {
-            int idx=s.charAt(i)-'a';
-            if(curr.ch[idx]==null)
-                return false;
-            curr=curr.ch[idx];
-        }
-        return curr.eow;
-    }
-    public int minlenword(String s)
-    {
-        Trie curr=this;
-        for(int i=0;i<s.length();i++)
-        {
-            if(curr.search(s.substring(0,i+1)))
-                return i+1;
+            int idx = s.charAt(i) - 'a';
+            if (curr.ch[idx] == null) 
+                break; 
+            curr = curr.ch[idx];
+            if (curr.eow)
+                return i + 1; 
         }
         return 0;
     }
