@@ -1,31 +1,30 @@
 class Solution {
-    public int[] asteroidCollision(int[] asteroids) 
-    {
+    public int[] asteroidCollision(int[] asteroids) {
         ArrayDeque<Integer> st=new ArrayDeque<>();
-        for(int i=0;i<asteroids.length;i++)
+        for(int a:asteroids)
         {
-            boolean alive=true;
-            if(asteroids[i]<0)
+            if(a<0)
             {
-                int curr=Math.abs(asteroids[i]);
-                while(!st.isEmpty() && st.peek()>0 && curr>st.peek())
+                int absa=Math.abs(a);
+                while(!st.isEmpty() && st.peek()>0 && st.peek()<absa)
                     st.pop();
-                if(!st.isEmpty() && st.peek()>0)
+                if(st.isEmpty())
+                    st.push(a);
+                else
                 {
-                    if(st.peek()==curr)
+                    if(st.peek()==absa)
                         st.pop();
-                    alive=false;
+                    else if(st.peek()<0)
+                        st.push(a);
                 }
-                if(alive)
-                    st.push(asteroids[i]);
             }
             else
-                st.push(asteroids[i]);
+                st.push(a);
         }
-        int s=st.size();
-        int[] ans=new int[s];
-        while(!st.isEmpty())
-            ans[--s]=st.pop();
-        return ans;
+        int k=st.size();
+        int[] arr=new int[k];
+        for(int i=k-1;i>=0;i--)
+            arr[i]=st.pop();
+        return arr;
     }
 }
