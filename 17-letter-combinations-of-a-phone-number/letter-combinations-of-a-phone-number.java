@@ -1,22 +1,19 @@
 class Solution {
-    String[] tele={" ","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+    String[] values={" ","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
     public List<String> letterCombinations(String digits) {
-        List<String> ans=new ArrayList<>();
-        backtrack(0,digits,new StringBuilder(),ans);
-        return ans;
+        List<String> l=new ArrayList<>();
+        backtrack(0,digits,"",l);
+        return l;
     }
-    public void backtrack(int idx,String digits,StringBuilder sb,List<String> ans)
+    public void backtrack(int idx,String digits,String curr,List<String> l)
     {
         if(idx==digits.length())
         {
-            ans.add(sb.toString());
+            l.add(curr);
             return;
         }
-        for(char ch:tele[digits.charAt(idx)-'0'].toCharArray())
-        {
-            sb.append(ch);
-            backtrack(idx+1,digits,sb,ans);
-            sb.deleteCharAt(sb.length()-1);
-        }
+        int dig=digits.charAt(idx)-'0';
+        for(int i=0;i<values[dig].length();i++)
+            backtrack(idx+1,digits,curr+values[dig].charAt(i),l);
     }
 }
