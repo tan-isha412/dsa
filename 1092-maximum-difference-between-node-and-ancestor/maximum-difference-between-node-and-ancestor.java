@@ -14,19 +14,17 @@
  * }
  */
 class Solution {
-    int maxm=Integer.MIN_VALUE;
     public int maxAncestorDiff(TreeNode root) {
         if(root==null) return 0;
-        return calcMax(root,Integer.MAX_VALUE,Integer.MIN_VALUE);
+        return maxmDiff(root,10001,-1);
     }
-    public int calcMax(TreeNode root,int minm,int maxm)
+    public int maxmDiff(TreeNode curr,int minm,int maxm)
     {
-        if(root==null) return maxm-minm;
-        minm=Math.min(minm,root.val);
-        maxm=Math.max(maxm,root.val);
-        int left=calcMax(root.left,minm,maxm);
-        int right=calcMax(root.right,minm,maxm);
-        if(left>right) return left;
-        return right;
+        if(curr==null) return maxm-minm;
+        minm=Math.min(minm,curr.val);
+        maxm=Math.max(maxm,curr.val);
+        int l=maxmDiff(curr.left,minm,maxm);
+        int r=maxmDiff(curr.right,minm,maxm);
+        return Math.max(l,r);
     }
 }
