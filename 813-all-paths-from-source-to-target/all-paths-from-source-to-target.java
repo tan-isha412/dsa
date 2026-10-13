@@ -13,6 +13,7 @@ class Solution {
             ans.add(new ArrayList<>(currPath));
             return;
         }
+        if(graph[curr]==null) return;
         for(int nei:graph[curr])
         {
             if(currPath.contains(nei)) continue;
