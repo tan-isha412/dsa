@@ -1,27 +1,32 @@
-import java.math.BigInteger;
 class Solution {
     public boolean splitString(String s) {
-        return backtrack(0, s, new ArrayList<>());
+        long firstNum = 0;
+        for (int i = 0; i < s.length() - 1; i++) {
+            firstNum = firstNum * 10 + (s.charAt(i) - '0');
+            if (firstNum < 0) break; 
+            if (backtrack(s, i + 1, firstNum)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public boolean backtrack(int start, String s, List<BigInteger> ans) {
-        if (start == s.length() && ans.size() >= 2) {
+    private boolean backtrack(String s, int index, long prevVal) {
+        if (index == s.length()) {
             return true;
         }
 
-        for (int i = start; i < s.length(); i++) {
-            BigInteger num = new BigInteger(s.substring(start, i + 1));
-
-            if (num.compareTo(BigInteger.ZERO) >= 0) {
-                
-                if (ans.isEmpty() || ans.get(ans.size() - 1).equals(num.add(BigInteger.ONE))) {
-                    ans.add(num);
-                    
-                    if (backtrack(i + 1, s, ans)) {
-                        return true;
-                    }
-                    ans.remove(ans.size() - 1); 
+        long currentVal = 0;
+        for (int i = index; i < s.length(); i++) {
+            currentVal = currentVal * 10 + (s.charAt(i) - '0');
+            if (currentVal < 0) break;
+            if (currentVal == prevVal - 1) {
+                if (backtrack(s, i + 1, currentVal)) {
+                    return true;
                 }
+            } 
+            else if (currentVal >= prevVal) {
+                break;
             }
         }
         return false;
