@@ -1,33 +1,37 @@
 class Solution {
     public int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
-        int M = 1000000007;
-        int[][] dp = new int[m][n];
-        dp[startRow][startColumn] = 1;
-        int count = 0;
-        int[] r = {-1, 1, 0, 0};
-        int[] c = {0, 0, -1, 1};
-        while(maxMove>0)
+    if (maxMove == 0) return 0;
+    
+    int MOD = 1000000007;
+    int[] r = {-1, 1, 0, 0};
+    int[] c = {0, 0, -1, 1};
+    
+    int[][] dp = new int[m][n];
+    dp[startRow][startColumn] = 1; 
+    int tot = 0;
+    
+    for (int step = 0; step < maxMove; step++) {
+        int[][] temp = new int[m][n];
+        for (int j = 0; j < m; j++) 
         {
-            int[][] nextDp = new int[m][n];
-            for (int i = 0; i < m; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (dp[i][j] > 0) {
-                        for (int k = 0; k < 4; k++) {
-                            int nr = i + r[k];
-                            int nc = j + c[k];
-                            if (nr < 0 || nr >= m || nc < 0 || nc >= n) {
-                                count = (count + dp[i][j]) % M;
-                            } else {
-                                nextDp[nr][nc] = (nextDp[nr][nc] + dp[i][j]) % M;
-                            }
-                        }
+            for (int k = 0; k < n; k++) 
+            {
+                if (dp[j][k] > 0) 
+                {
+                    for (int l = 0; l < 4; l++) 
+                    {
+                        int newr = j + r[l];
+                        int newc = k + c[l];
+                        if (newr < 0 || newr >= m || newc < 0 || newc >= n) 
+                            tot = (tot + dp[j][k]) % MOD;
+                        else
+                            temp[newr][newc] = (temp[newr][newc] + dp[j][k]) % MOD;
                     }
                 }
             }
-            dp = nextDp; // Move to the next step
-            maxMove--;
         }
-        
-        return count;
+        dp = temp;
     }
+    return tot;
+}
 }
