@@ -11,11 +11,8 @@ class Solution {
         {
             for(int j=1;j<=target;j++)
             {
-                for (int face = 1; face <= k; face++) 
-                {
-                    if (j >= face) 
-                        dp[i][j] = (dp[i][j] + dp[i - 1][j - face]) % MOD;
-                }
+                for(int face=1;face<=k;face++)
+                    dp[i][j]=(dp[i][j]+dp[i-1][Math.max(0,j-face)])%MOD;
             }
         }
         return dp[n][target];
