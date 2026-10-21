@@ -1,37 +1,43 @@
 class Solution {
     public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
-        Map<String,Map<String,Double>> m=new HashMap<>();
-        for(int i=0;i<equations.size();i++)
-        {
-            String one=equations.get(i).get(0);
-            String two=equations.get(i).get(1);
-            m.computeIfAbsent(one, k -> new HashMap<>()).put(two, values[i]);
-            m.computeIfAbsent(two, k -> new HashMap<>()).put(one, 1.0 / values[i]);
+        Map<String, Map<String, Double>> graph = new HashMap<>();
+        
+        for (int i = 0; i < equations.size(); i++) { 
+            String u = equations.get(i).get(0);
+            String v = equations.get(i).get(1);
+            double val = values[i];
+            
+            graph.putIfAbsent(u, new HashMap<>());
+            graph.putIfAbsent(v, new HashMap<>());
+            
+            graph.get(u).put(v, val);
+            graph.get(v).put(u, 1.0 / val);
         }
-        double[] ans=new double[queries.size()];
-
-        for(int i=0;i<queries.size();i++)
-        {
-            if(!m.containsKey(queries.get(i).get(0)) || !m.containsKey(queries.get(i).get(1)))
-            ans[i]=-1.00;
-            else
-            ans[i]=dfs(queries.get(i).get(0),queries.get(i).get(1),new HashSet<>(),m,1.00);
+        
+        double[] ans = new double[queries.size()];
+        for (int i = 0; i < queries.size(); i++) {
+            String src = queries.get(i).get(0);
+            String dst = queries.get(i).get(1);
+            ans[i] = dfs(src, dst, graph, new HashSet<>(), 1.0);
         }
         return ans;
     }
-    public double dfs(String s1,String s2,Set<String> v,Map<String,Map<String,Double>> m,double a)
-    {
-        if(s1.equals(s2))
-            return a;
-        v.add(s1);
-        for(Map.Entry<String,Double> map:m.get(s1).entrySet())
-        {
-            if(!v.contains(map.getKey()))
-            {
-            double back=dfs(map.getKey(),s2,v,m,a*map.getValue());
-            if(back!=-1.00) return back;
+    
+    private double dfs(String src, String dst, Map<String, Map<String, Double>> graph, Set<String> visited, double val) {
+        if (!graph.containsKey(src)) return -1.0;
+        if (src.equals(dst)) return val;
+        
+        visited.add(src);
+        for (Map.Entry<String, Double> neighbor : graph.get(src).entrySet()) {
+            String nextNode = neighbor.getKey();
+            double edgeWeight = neighbor.getValue();
+            if (!visited.contains(nextNode)) {
+                double res = dfs(nextNode, dst, graph, visited, val * edgeWeight);
+                if (res != -1.0) {
+                    return res;
+                }
             }
         }
-        return -1.00;
+        return -1.0;
     }
 }
