@@ -14,26 +14,27 @@
  * }
  */
 class Solution {
-    int idx=0;
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        return buildNode(preorder,inorder,0,inorder.length-1);
-    }
-    public TreeNode buildNode(int[] preorder,int[] inorder,int left,int right)
+    int preorderidx=0;
+    public TreeNode buildTree(int[] preorder, int[] inorder) 
     {
-        if(left>right) return null;
-        TreeNode root=new TreeNode(preorder[idx]);
-        int pos=find(inorder,preorder[idx++]);
-        root.left=buildNode(preorder,inorder,left,pos-1);
-        root.right=buildNode(preorder,inorder,pos+1,right);
+        return build(preorder,inorder,0,inorder.length-1);
+    }
+    public TreeNode build(int[] preorder, int[] inorder,int l,int r)
+    {
+        if(l>r) return null;
+        int i=findPos(inorder,preorder[preorderidx]);
+        TreeNode root=new TreeNode(preorder[preorderidx++]);
+        root.left=build(preorder,inorder,l,i-1);
+        root.right=build(preorder,inorder,i+1,r);
         return root;
-    }
-    public int find(int[] inorder,int val)
+    } 
+    public int findPos(int[] inorder,int val)
     {
-        for(int i=0;i<inorder.length;i++)
+        int i=0;
+        for(;i<inorder.length;i++)
         {
-            if(inorder[i]==val)
-                return i;
+            if(inorder[i]==val) break;
         }
-        return -1;
+        return i;
     }
 }
