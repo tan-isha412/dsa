@@ -1,22 +1,21 @@
 class Solution {
     public int longestStrChain(String[] words) {
-        Arrays.sort(words, (a, b) -> a.length() - b.length());
-        Map<String, Integer> dp = new HashMap<>();
-        int longestChain = 1;
-        for (String word : words) 
+        Arrays.sort(words,((a,b)->a.length()-b.length()));
+        Map<String,Integer> dp=new HashMap<>();
+        int longest=1;
+        for(String w:words)
         {
-            int currentLength = 1;
-            for (int i = 0; i < word.length(); i++) 
+            int curr=1;
+            for(int i=0;i<w.length();i++)
             {
-                StringBuilder sb = new StringBuilder(word);
+                StringBuilder sb=new StringBuilder(w);
                 sb.deleteCharAt(i);
-                String predecessor = sb.toString();
-                if (dp.containsKey(predecessor)) 
-                    currentLength = Math.max(currentLength, dp.get(predecessor) + 1);
+                if(dp.containsKey(sb.toString()))
+                    curr=Math.max(curr,dp.get(sb.toString())+1);
             }
-            dp.put(word, currentLength);
-            longestChain = Math.max(longestChain, currentLength);
+            dp.put(w,curr);
+            longest=Math.max(longest,curr);
         }
-        return longestChain;
+        return longest;
     }
 }
