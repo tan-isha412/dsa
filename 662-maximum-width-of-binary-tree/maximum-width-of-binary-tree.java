@@ -16,33 +16,35 @@
 class Pair
 {
     TreeNode curr;
-    int idx;
-    Pair(TreeNode curr,int idx)
+    int w;
+    Pair(TreeNode curr,int w)
     {
         this.curr=curr;
-        this.idx=idx;
+        this.w=w;
     }
 }
 class Solution {
     public int widthOfBinaryTree(TreeNode root) {
-        if(root==null) return 0;
+        int maxW=0;
+        if(root==null) return maxW;
         ArrayDeque<Pair> q=new ArrayDeque<>();
-        int w=0;
         q.offer(new Pair(root,0));
         while(!q.isEmpty())
         {
-            int s=q.size();
-            int currd=0;
+            int s=q.size(),minm=Integer.MAX_VALUE,maxm=Integer.MIN_VALUE,f=q.peek().w;
             for(int i=0;i<s;i++)
             {
-                Pair ob=q.poll();
-                if(i==0) currd-=ob.idx;
-                if(i==s-1) currd+=ob.idx;
-                if(ob.curr.left!=null) q.offer(new Pair(ob.curr.left,ob.idx*2));
-                if(ob.curr.right!=null) q.offer(new Pair(ob.curr.right,ob.idx*2+1));
+                Pair obj=q.poll();
+                int n=obj.w-f;
+                minm=Math.min(minm,n);
+                maxm=Math.max(maxm,n);
+                if(obj.curr.left!=null)
+                    q.offer(new Pair(obj.curr.left,(2*n)));
+                if(obj.curr.right!=null)
+                    q.offer(new Pair(obj.curr.right,(2*n+1)));
             }
-            w=Math.max(w,currd+1);
+            maxW=Math.max(maxW,maxm-minm+1);
         }
-        return w;
+        return maxW;
     }
 }
