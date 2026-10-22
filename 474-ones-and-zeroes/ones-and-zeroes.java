@@ -3,19 +3,16 @@ class Solution {
         int[][] dp=new int[m+1][n+1];
         for(String s:strs)
         {
-            int ones=0;
-            int zeroes=0;
+            int z=0,o=0;
             for(char ch:s.toCharArray())
             {
-                 if(ch=='1') ones++;
-                 else zeroes++;
+                if(ch=='0') z++;
+                else o++;
             }
-            for(int i=m;i>=zeroes;i--)
+            for(int i=m;i>=z;i--)
             {
-                for(int j=n;j>=ones;j--)
-                {
-                    dp[i][j]=Math.max(dp[i][j],dp[i-zeroes][j-ones]+1);
-                }
+                for(int j=n;j>=o;j--)
+                    dp[i][j]=Math.max(dp[i][j],dp[i-z][j-o]+1);
             }
         }
         return dp[m][n];
