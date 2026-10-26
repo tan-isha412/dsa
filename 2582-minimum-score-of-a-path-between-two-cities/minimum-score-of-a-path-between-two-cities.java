@@ -1,43 +1,35 @@
-import java.util.*;
-
 class Solution {
     public int minScore(int n, int[][] roads) {
-        // 1. Build the adjacency list graph
-        List<int[]>[] adj = new ArrayList[n + 1];
-        for (int i = 0; i <= n; i++) {
-            adj[i] = new ArrayList<>();
-        }
-        
-        for (int[] road : roads) {
-            int u = road[0];
-            int v = road[1];
-            int w = road[2];
-            adj[u].add(new int[]{v, w});
-            adj[v].add(new int[]{u, w});
-        }
-        
-        // 2. Standard BFS/DFS without backtracking
-        int minScore = Integer.MAX_VALUE;
-        boolean[] visited = new boolean[n + 1];
-        Queue<Integer> queue = new LinkedList<>();
-        
-        queue.offer(1);
-        visited[1] = true;
-        
-        while (!queue.isEmpty()) 
+        ArrayList<ArrayList<int[]>> adj=new ArrayList<>();
+        for(int i=0;i<n;i++)
+            adj.add(new ArrayList<>());
+        for(int[] r:roads)
         {
-            int node = queue.poll();
-            for (int[] neighbor : adj[node]) {
-                int nextNode = neighbor[0];
-                int weight = neighbor[1];
-                minScore = Math.min(minScore, weight);
-                if (!visited[nextNode]) 
+            adj.get(r[0]-1).add(new int[]{r[1]-1,r[2]});
+            adj.get(r[1]-1).add(new int[]{r[0]-1,r[2]});
+        }
+        ArrayDeque<Integer> q=new ArrayDeque<>();
+        Set<Integer> v=new HashSet<>();
+        q.offer(0);
+        v.add(0);
+        int minm=Integer.MAX_VALUE;
+        while(!q.isEmpty())
+        {
+            int s=q.size();
+            for(int i=0;i<s;i++)
+            {
+                int curr=q.poll();
+                for(int[] nei:adj.get(curr))
                 {
-                    visited[nextNode] = true;
-                    queue.offer(nextNode);
+                    minm=Math.min(minm,nei[1]);
+                    if(!v.contains(nei[0]))
+                    {
+                        q.offer(nei[0]);
+                        v.add(nei[0]);
+                    }
                 }
             }
         }
-        return minScore;
+        return minm;
     }
 }
