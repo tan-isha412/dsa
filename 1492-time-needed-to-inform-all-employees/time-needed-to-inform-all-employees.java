@@ -8,9 +8,7 @@ class Solution {
                 adj.get(manager[i]).add(new int[]{i,informTime[manager[i]]});
         }
         ArrayDeque<int[]> q=new ArrayDeque<>();
-        Set<Integer> v=new HashSet<>();
         q.offer(new int[]{headID,0});
-        v.add(headID);
         int maxm=0;
         while(!q.isEmpty())
         {
@@ -18,15 +16,9 @@ class Solution {
             for(int i=0;i<s;i++)
             {
                 int[] curr=q.poll();
+                maxm=Math.max(maxm,curr[1]);
                 for(int[] nei:adj.get(curr[0]))
-                {
-                    if(!v.contains(nei[0]))
-                    {
-                        q.offer(new int[]{nei[0],curr[1]+nei[1]});
-                        v.add(nei[0]);
-                        maxm=Math.max(maxm,curr[1]+nei[1]);
-                    }
-                }
+                    q.offer(new int[]{nei[0],curr[1]+nei[1]});
             }
         }
         return maxm;
