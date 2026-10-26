@@ -1,24 +1,33 @@
 class Solution {
     public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
-        ArrayList<ArrayList<Integer>> subord=new ArrayList<>();
+        ArrayList<ArrayList<int[]>> adj=new ArrayList<>();
+        for(int i=0;i<n;i++) adj.add(new ArrayList<>());
         for(int i=0;i<n;i++)
-            subord.add(new ArrayList<>());
-        for(int i=0;i<n;i++)
-        {   
+        {
             if(manager[i]!=-1)
-                subord.get(manager[i]).add(i);
+                adj.get(manager[i]).add(new int[]{i,informTime[manager[i]]});
         }
         ArrayDeque<int[]> q=new ArrayDeque<>();
+        Set<Integer> v=new HashSet<>();
         q.offer(new int[]{headID,0});
+        v.add(headID);
         int maxm=0;
         while(!q.isEmpty())
         {
-            int[] curboss=q.poll();
-            maxm=Math.max(maxm,curboss[1]);
-            if(subord.get(curboss[0]).size()==0)
-                continue;
-            for(int nei:subord.get(curboss[0]))
-                q.offer(new int[]{nei,curboss[1]+informTime[curboss[0]]});
+            int s=q.size();
+            for(int i=0;i<s;i++)
+            {
+                int[] curr=q.poll();
+                for(int[] nei:adj.get(curr[0]))
+                {
+                    if(!v.contains(nei[0]))
+                    {
+                        q.offer(new int[]{nei[0],curr[1]+nei[1]});
+                        v.add(nei[0]);
+                        maxm=Math.max(maxm,curr[1]+nei[1]);
+                    }
+                }
+            }
         }
         return maxm;
     }
