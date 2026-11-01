@@ -1,17 +1,23 @@
 class Solution {
     public int mincostTickets(int[] days, int[] costs) {
-        int maxm=days[days.length-1];
-        int[] dp=new int[maxm+1];
-        boolean[] travDay=new boolean[maxm+1];
+        int n=days.length;
+        int last=days[n-1];
+        int[] c=new int[last+1];
+        boolean[] trav=new boolean[last+1];
         for(int d:days)
-            travDay[d]=true;
-        for(int i=1;i<=maxm;i++)
+            trav[d]=true;
+        for(int i=1;i<=last;i++)
         {
-            if(travDay[i])
-                dp[i]=Math.min(dp[Math.max(0,i-30)]+costs[2],Math.min(dp[i-1]+costs[0],dp[Math.max(0,i-7)]+costs[1]));
+            if(!trav[i])
+                c[i]=c[i-1];
             else
-                dp[i]=dp[i-1];
+            {
+                int c1=c[Math.max(0,i-1)]+costs[0];
+                int c2=c[Math.max(0,i-7)]+costs[1];
+                int c3=c[Math.max(0,i-30)]+costs[2];
+                c[i]=Math.min(c1,Math.min(c2,c3));
+            }
         }
-        return dp[maxm];
+        return c[last];
     }
 }
